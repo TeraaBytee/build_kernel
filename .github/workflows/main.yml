@@ -21,7 +21,7 @@ env:
   USER_GIT: ${{ secrets.USER_GIT }}
   KEY_GIT: ${{ secrets.KEY_GIT }}
   REPO: ${{ secrets.REPO }}
-  KERNEL_BRANCH_R: ${{ secrets.KERNEL_BRANCH_R }}
+  KERNEL_BRANCH_Q: ${{ secrets.KERNEL_BRANCH_Q }}
   TZ: Asia/Jakarta
 
 jobs:
@@ -48,7 +48,7 @@ jobs:
             -d "disable_web_page_preview=true" \
             -d "parse_mode=html" \
             -d text="Clone source kernel"
-            git clone --depth=5 https://$USER_GIT:$KEY_GIT@github.com/$REPO -b $KERNEL_BRANCH_R begonia
+            git clone --depth=5 https://$USER_GIT:$KEY_GIT@github.com/$REPO -b $KERNEL_BRANCH_Q begonia
         - name: Clone compiler
           run: |
             curl -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
