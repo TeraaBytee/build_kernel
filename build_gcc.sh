@@ -58,9 +58,9 @@ if [ -e $MainPath/out/arch/arm64/boot/Image.gz-dtb ]; then
     BUILD_END=$(date +"%s")
     DIFF=$((BUILD_END - BUILD_START))
     MakeZip
-    echo "Build success in : $((DIFF / 60)) minute(s) and $((DIFF % 60)) second(s)"
+    echo "Build success in : $((DIFF / 60)) minute(s) and $((DIFF % 60)) second(s)" > TIME
 else
     BUILD_END=$(date +"%s")
     DIFF=$((BUILD_END - BUILD_START))
-    echo "Build fail in : $((DIFF / 60)) minute(s) and $((DIFF % 60)) second(s)"
+    echo "Build fail in : $((DIFF / 60)) minute(s) and $((DIFF % 60)) second(s)" > TIME
 fi
