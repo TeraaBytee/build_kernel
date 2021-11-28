@@ -10,18 +10,18 @@ Any="$(pwd)/../AnyKernel3"
 # Make flashable zip
 MakeZip() {
     if [ ! -d $Any ]; then
-        git clone https://github.com/TeraaBytee/AnyKernel3 -b master $Any
+        git clone https://github.com/TeraaBytee/AnyKernel3 -b q-oss $Any
         cd $Any
     else
         cd $Any
         git reset --hard
-        git checkout master
-        git fetch origin master
-        git reset --hard origin/master
+        git checkout q-oss
+        git fetch origin q-oss
+        git reset --hard origin/q-oss
     fi
     cp -af $MainPath/out/arch/arm64/boot/Image.gz-dtb $Any
     sed -i "s/kernel.string=.*/kernel.string=$KERNEL_NAME-$HeadCommit test by $KBUILD_BUILD_USER/g" anykernel.sh
-    zip -r9 $MainPath/"[$Compiler][R-OSS]-$ZIP_KERNEL_VERSION-$KERNEL_NAME-$TIME.zip" * -x .git README.md *placeholder
+    zip -r9 $MainPath/"[$Compiler][Q-OSS]-$ZIP_KERNEL_VERSION-$KERNEL_NAME-$TIME.zip" * -x .git README.md *placeholder
     cd $MainPath
 }
 
@@ -57,9 +57,9 @@ if [ -e $MainPath/out/arch/arm64/boot/Image.gz-dtb ]; then
     BUILD_END=$(date +"%s")
     DIFF=$((BUILD_END - BUILD_START))
     MakeZip
-    echo "Build success in : $((DIFF / 60)) minute(s) and $((DIFF % 60)) second(s)"
+    echo "Build success in : $((DIFF / 60)) minute(s) and $((DIFF % 60)) second(s)" > TIME
 else
     BUILD_END=$(date +"%s")
     DIFF=$((BUILD_END - BUILD_START))
-    echo "Build fail in : $((DIFF / 60)) minute(s) and $((DIFF % 60)) second(s)"
+    echo "Build fail in : $((DIFF / 60)) minute(s) and $((DIFF % 60)) second(s)" > TIME
 fi
