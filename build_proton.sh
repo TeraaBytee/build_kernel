@@ -2,8 +2,7 @@
 
 # Defined path
 MainPath="$(pwd)"
-GCC64="$(pwd)/../GCC64"
-GCC="$(pwd)/../GCC"
+proton="$(pwd)/../proton"
 Any="$(pwd)/../AnyKernel3"
 
 # Make flashable zip
@@ -36,22 +35,23 @@ ZIP_KERNEL_VERSION="4.14.$(cat "$MainPath/Makefile" | grep "SUBLEVEL =" | sed 's
 TIME=$(date +"%m%d%H%M")
 
 # Start building
-Compiler=GCC
+Compiler=Proton
 MAKE="./makeparallel"
 rm -rf out
 BUILD_START=$(date +"%s")
 
 make  -j$(nproc --all)  O=out ARCH=arm64 SUBARCH=arm64 $Defconfig
 make  -j$(nproc --all)  O=out \
-                        PATH=$GCC64/bin:$GCC/bin:/usr/bin:${PATH} \
-                        CROSS_COMPILE=aarch64-elf- \
-                        CROSS_COMPILE_ARM32=arm-eabi- \
-                        AR=aarch64-elf-ar \
+                        PATH="$proton/bin:/usr/bin:$PATH" \
+                        CC=clang \
+                        AS=llvm-as \
                         NM=llvm-nm \
+                        OBJCOPY=llvm-objcopy \
+                        OBJDUMP=llvm-objdump \
+                        STRIP=llvm-strip \
                         LD=ld.lld \
-                        OBCOPY=llvm-objcopy \
-                        OBJDUMP=aarch64-elf-objdump \
-                        STRIP=aarch64-elf-strip \
+                        CROSS_COMPILE=aarch64-linux-gnu- \
+                        CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
                         2>&1 | tee out/error.log
 
 if [ -e $MainPath/out/arch/arm64/boot/Image.gz-dtb ]; then
