@@ -2,7 +2,9 @@
 
 # Defined path
 MainPath="$(pwd)"
-proton="$(pwd)/../proton"
+dtc="$(pwd)/../DragonTC"
+gcc64="$(pwd)/../gcc64"
+gcc="$(pwd)/../gcc"
 Any="$(pwd)/../AnyKernel3"
 
 # Make flashable zip
@@ -35,23 +37,20 @@ ZIP_KERNEL_VERSION="4.14.$(cat "$MainPath/Makefile" | grep "SUBLEVEL =" | sed 's
 TIME=$(date +"%m%d%H%M")
 
 # Start building
-Compiler=Proton
+Compiler=DragonTC
 MAKE="./makeparallel"
 rm -rf out
 BUILD_START=$(date +"%s")
 
 make  -j$(nproc --all)  O=out ARCH=arm64 SUBARCH=arm64 $Defconfig
 make  -j$(nproc --all)  O=out \
-                        PATH="$proton/bin:/usr/bin:$PATH" \
+                        PATH="$dtc/bin:/$gcc64/bin:/$gcc/bin:/usr/bin:$PATH" \
+                        LD_LIBRARY_PATH="$dtc/lib64:$LD_LIBRABRY_PATH" \
                         CC=clang \
-                        AS=llvm-as \
-                        NM=llvm-nm \
-                        OBJCOPY=llvm-objcopy \
-                        OBJDUMP=llvm-objdump \
-                        STRIP=llvm-strip \
                         LD=ld.lld \
-                        CROSS_COMPILE=aarch64-linux-gnu- \
-                        CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
+                        CROSS_COMPILE=aarch64-linux-android- \
+                        CROSS_COMPILE_ARM32=arm-linux-androideabi- \
+                        CLANG_TRIPLE=aarch64-linux-gnu- \
                         2>&1 | tee out/error.log
 
 if [ -e $MainPath/out/arch/arm64/boot/Image.gz-dtb ]; then
