@@ -75,9 +75,13 @@ jobs:
                 -F document=@"$ZIP" \
                 -F parse_mode=markdown https://api.telegram.org/bot$BOT_TOKEN/sendDocument \
                 -F caption="$(cat TIME) @TeraaBytee"
+                curl -F chat_id="$CHAT_ID" \
+                -F document=@"out/build.log" \
+                -F parse_mode=markdown https://api.telegram.org/bot$BOT_TOKEN/sendDocument \
+                -F caption="Check this @TeraaBytee"
             else
                 curl -F chat_id="$CHAT_ID" \
-                -F document=@"out/error.log" \
+                -F document=@"out/build.log" \
                 -F parse_mode=markdown https://api.telegram.org/bot$BOT_TOKEN/sendDocument \
                 -F caption="$(cat TIME) @TeraaBytee"
             fi

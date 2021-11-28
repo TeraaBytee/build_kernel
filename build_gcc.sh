@@ -52,7 +52,7 @@ make  -j$(nproc --all)  O=out \
                         OBCOPY=llvm-objcopy \
                         OBJDUMP=aarch64-elf-objdump \
                         STRIP=aarch64-elf-strip \
-                        2>&1 | tee out/error.log
+                        2>&1 | tee out/build.log
 
 if [ -e $MainPath/out/arch/arm64/boot/Image.gz-dtb ]; then
     BUILD_END=$(date +"%s")
